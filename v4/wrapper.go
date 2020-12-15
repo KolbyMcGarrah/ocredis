@@ -66,3 +66,13 @@ func (w *Wrapper) Ping(ctx context.Context) (cmd ocredis.StatusCmd) {
 	cmd = w.client.Ping()
 	return cmd
 }
+
+// Del integrates the redis Del command with metrics
+func (w *Wrapper) Del(ctx context.Context, keys ...string) (cmd ocredis.IntCmd) {
+	var recordCallFunc = ocredis.RecordCall(ctx, "go.redis.incr", w.instanceName)
+	defer func() {
+		recordCallFunc(cmd)
+	}()
+	cmd = w.client.Del(keys...)
+	return
+}
