@@ -36,3 +36,11 @@ type IntCmd interface {
 	Err() error
 	Result() (int64, error)
 }
+
+// BoolCmd interface matches the BoolCmd struct returned by redis clients
+type BoolCmd interface {
+	Err() error
+	Result() (bool, error)
+	String() string
+	Val() bool
+}
