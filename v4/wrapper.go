@@ -39,7 +39,9 @@ func (w *Wrapper) Get(ctx context.Context, key string) (cmd ocredis.StringCmd) {
 	if ocredis.AllowTrace(ctx, w.options.Get, w.options.AllowRoot) {
 		span := ocredis.StartSpan(ctx, "Get", w.options)
 		if span != nil {
-			defer span.EndSpanWithErr(cmd.Err())
+			defer func() {
+				span.EndSpanWithErr(cmd.Err())
+			}()
 		}
 	}
 	var recordCallFunc = ocredis.RecordCall(ctx, "go.redis.get", w.options.InstanceName)
@@ -56,7 +58,9 @@ func (w *Wrapper) Set(ctx context.Context, key string, value interface{}, expira
 	if ocredis.AllowTrace(ctx, w.options.Set, w.options.AllowRoot) {
 		span := ocredis.StartSpan(ctx, "Set", w.options)
 		if span != nil {
-			defer span.EndSpanWithErr(cmd.Err())
+			defer func() {
+				span.EndSpanWithErr(cmd.Err())
+			}()
 		}
 	}
 	var recordCallFunc = ocredis.RecordCall(ctx, "go.redis.set", w.options.InstanceName)
@@ -73,7 +77,9 @@ func (w *Wrapper) Incr(ctx context.Context, key string) (cmd ocredis.IntCmd) {
 	if ocredis.AllowTrace(ctx, w.options.Incr, w.options.AllowRoot) {
 		span := ocredis.StartSpan(ctx, "Incr", w.options)
 		if span != nil {
-			defer span.EndSpanWithErr(cmd.Err())
+			defer func() {
+				span.EndSpanWithErr(cmd.Err())
+			}()
 		}
 	}
 	var recordCallFunc = ocredis.RecordCall(ctx, "go.redis.incr", w.options.InstanceName)
@@ -90,7 +96,9 @@ func (w *Wrapper) Ping(ctx context.Context) (cmd ocredis.StatusCmd) {
 	if ocredis.AllowTrace(ctx, w.options.Ping, w.options.AllowRoot) {
 		span := ocredis.StartSpan(ctx, "Ping", w.options)
 		if span != nil {
-			defer span.EndSpanWithErr(cmd.Err())
+			defer func() {
+				span.EndSpanWithErr(cmd.Err())
+			}()
 		}
 	}
 	var recordCallFunc = ocredis.RecordCall(ctx, "go.redis.ping", w.options.InstanceName)
@@ -106,7 +114,9 @@ func (w *Wrapper) Del(ctx context.Context, keys ...string) (cmd ocredis.IntCmd) 
 	if ocredis.AllowTrace(ctx, w.options.Del, w.options.AllowRoot) {
 		span := ocredis.StartSpan(ctx, "Del", w.options)
 		if span != nil {
-			defer span.EndSpanWithErr(cmd.Err())
+			defer func() {
+				span.EndSpanWithErr(cmd.Err())
+			}()
 		}
 	}
 	var recordCallFunc = ocredis.RecordCall(ctx, "go.redis.del", w.options.InstanceName)
@@ -122,7 +132,9 @@ func (w *Wrapper) SetNX(ctx context.Context, key string, value interface{}, expi
 	if ocredis.AllowTrace(ctx, w.options.SetNX, w.options.AllowRoot) {
 		span := ocredis.StartSpan(ctx, "SetNX", w.options)
 		if span != nil {
-			defer span.EndSpanWithErr(cmd.Err())
+			defer func() {
+				span.EndSpanWithErr(cmd.Err())
+			}()
 		}
 	}
 	var recordCallFunc = ocredis.RecordCall(ctx, "go.redis.setnx", w.options.InstanceName)
@@ -138,7 +150,9 @@ func (w *Wrapper) Close(ctx context.Context) (err error) {
 	if ocredis.AllowTrace(ctx, w.options.Close, w.options.AllowRoot) {
 		span := ocredis.StartSpan(ctx, "Close", w.options)
 		if span != nil {
-			defer span.EndSpanWithErr(err)
+			defer func() {
+				span.EndSpanWithErr(err)
+			}()
 		}
 	}
 	var recordCallFunc = ocredis.RecordCall(ctx, "go.redis.close", w.options.InstanceName)
@@ -155,7 +169,9 @@ func (w *Wrapper) Expire(ctx context.Context, key string, expiration time.Durati
 	if ocredis.AllowTrace(ctx, w.options.Expire, w.options.AllowRoot) {
 		span := ocredis.StartSpan(ctx, "Expire", w.options)
 		if span != nil {
-			defer span.EndSpanWithErr(cmd.Err())
+			defer func() {
+				span.EndSpanWithErr(cmd.Err())
+			}()
 		}
 	}
 	var recordCallFunc = ocredis.RecordCall(ctx, "go.redis.expire", w.options.InstanceName)
