@@ -2,6 +2,7 @@ package ocredis
 
 import "go.opencensus.io/trace"
 
+// DefaultInstanceName is the instance name assigned when one isn't provided
 const DefaultInstanceName = "default"
 
 // TraceOption allows for managing cache trace configurations using funcitonal options
@@ -11,9 +12,9 @@ type TraceOption func(o *TraceOptions)
 // by default all options are initialized to false.
 type TraceOptions struct {
 
-	// AllowRoot, if set to true, will allow go-cache to create root spans in
+	// AllowRoot, if set to true, will allow ocredis to create root spans in
 	// absence of existing spans or even context.
-	// Default is to not trace go-cache calls if no existing parent span is found
+	// Default is to not trace ocredis calls if no existing parent span is found
 	// in context or when using methods not taking context.
 	AllowRoot bool
 
