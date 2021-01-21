@@ -144,3 +144,22 @@ func (w *Wrapper) SetNX(ctx context.Context, key string, value interface{}, expi
 	cmd = w.client.SetNX(key, value, expiration)
 	return
 }
+
+// Close integrates the redis Close command with metrics
+func (w *Wrapper) Close(ctx context.Context) (err error) {
+	if ocredis.AllowTrace(ctx, w.options.Close, w.options.AllowRoot) {
+		span := ocredis.StartSpan(ctx, "Close", w.options)
+		if span != nil {
+			defer func() {
+				span.EndSpanWithErr(err)
+			}()
+		}
+	}
+	var recordCallFunc = ocredis.RecordCall(ctx, "go.redis.close", w.options.InstanceName)
+	defer func() {
+		// Pass in a blank cmd because there is no command type returned from close
+		recordCallFunc(&pkgredis.Cmd{})
+	}()
+	err = w.client.Close()
+	return
+}
