@@ -66,3 +66,13 @@ func (w *Wrapper) Ping(ctx context.Context) (cmd ocredis.StatusCmd) {
 	cmd = w.client.Ping()
 	return cmd
 }
+
+// SetNX integrates the redis SetNX command with metrics
+func (w *Wrapper) SetNX(ctx context.Context, key string, value interface{}, expiration time.Duration) (cmd ocredis.BoolCmd) {
+	var recordCallFunc = ocredis.RecordCall(ctx, "go.redis.setnx", w.instanceName)
+	defer func() {
+		recordCallFunc(cmd)
+	}()
+	cmd = w.client.SetNX(key, value, expiration)
+	return
+}
