@@ -126,3 +126,21 @@ func (w *Wrapper) Del(ctx context.Context, keys ...string) (cmd ocredis.IntCmd) 
 	cmd = w.client.Del(keys...)
 	return
 }
+
+// SetNX integrates the redis SetNX command with metrics
+func (w *Wrapper) SetNX(ctx context.Context, key string, value interface{}, expiration time.Duration) (cmd ocredis.BoolCmd) {
+	if ocredis.AllowTrace(ctx, w.options.SetNX, w.options.AllowRoot) {
+		span := ocredis.StartSpan(ctx, "SetNX", w.options)
+		if span != nil {
+			defer func() {
+				span.EndSpanWithErr(cmd.Err())
+			}()
+		}
+	}
+	var recordCallFunc = ocredis.RecordCall(ctx, "go.redis.setnx", w.options.InstanceName)
+	defer func() {
+		recordCallFunc(cmd)
+	}()
+	cmd = w.client.SetNX(key, value, expiration)
+	return
+}
