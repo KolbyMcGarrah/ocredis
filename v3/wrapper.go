@@ -37,7 +37,7 @@ type Wrapper struct {
 // Get integrates the redis get command with metrics
 func (w *Wrapper) Get(ctx context.Context, key string) (cmd ocredis.StringCmd) {
 	if ocredis.AllowTrace(ctx, w.options.Get, w.options.AllowRoot) {
-		span := ocredis.StartSpan(ctx, "Get", w.options)
+		span := ocredis.StartSpan(ctx, "go.redis.get", w.options)
 		if span != nil {
 			defer func() {
 				span.EndSpanWithErr(cmd.Err())
@@ -56,7 +56,7 @@ func (w *Wrapper) Get(ctx context.Context, key string) (cmd ocredis.StringCmd) {
 // Set integrates the redis Set command with metrics
 func (w *Wrapper) Set(ctx context.Context, key string, value interface{}, expiration time.Duration) (cmd ocredis.StatusCmd) {
 	if ocredis.AllowTrace(ctx, w.options.Set, w.options.AllowRoot) {
-		span := ocredis.StartSpan(ctx, "Set", w.options)
+		span := ocredis.StartSpan(ctx, "go.redis.set", w.options)
 		if span != nil {
 			defer func() {
 				span.EndSpanWithErr(cmd.Err())
@@ -75,7 +75,7 @@ func (w *Wrapper) Set(ctx context.Context, key string, value interface{}, expira
 // Incr integrates the redis Incr command with metrics
 func (w *Wrapper) Incr(ctx context.Context, key string) (cmd ocredis.IntCmd) {
 	if ocredis.AllowTrace(ctx, w.options.Incr, w.options.AllowRoot) {
-		span := ocredis.StartSpan(ctx, "Incr", w.options)
+		span := ocredis.StartSpan(ctx, "go.redis.incr", w.options)
 		if span != nil {
 			defer func() {
 				span.EndSpanWithErr(cmd.Err())
@@ -94,7 +94,7 @@ func (w *Wrapper) Incr(ctx context.Context, key string) (cmd ocredis.IntCmd) {
 // Ping integrates the redis Ping command with metrics
 func (w *Wrapper) Ping(ctx context.Context) (cmd ocredis.StatusCmd) {
 	if ocredis.AllowTrace(ctx, w.options.Ping, w.options.AllowRoot) {
-		span := ocredis.StartSpan(ctx, "Ping", w.options)
+		span := ocredis.StartSpan(ctx, "go.redis.ping", w.options)
 		if span != nil {
 			defer func() {
 				span.EndSpanWithErr(cmd.Err())
@@ -112,7 +112,7 @@ func (w *Wrapper) Ping(ctx context.Context) (cmd ocredis.StatusCmd) {
 // Del integrates the redis Del command with metrics
 func (w *Wrapper) Del(ctx context.Context, keys ...string) (cmd ocredis.IntCmd) {
 	if ocredis.AllowTrace(ctx, w.options.Del, w.options.AllowRoot) {
-		span := ocredis.StartSpan(ctx, "Del", w.options)
+		span := ocredis.StartSpan(ctx, "go.redis.del", w.options)
 		if span != nil {
 			defer func() {
 				span.EndSpanWithErr(cmd.Err())
@@ -130,7 +130,7 @@ func (w *Wrapper) Del(ctx context.Context, keys ...string) (cmd ocredis.IntCmd) 
 // SetNX integrates the redis SetNX command with metrics
 func (w *Wrapper) SetNX(ctx context.Context, key string, value interface{}, expiration time.Duration) (cmd ocredis.BoolCmd) {
 	if ocredis.AllowTrace(ctx, w.options.SetNX, w.options.AllowRoot) {
-		span := ocredis.StartSpan(ctx, "SetNX", w.options)
+		span := ocredis.StartSpan(ctx, "go.redis.setnx", w.options)
 		if span != nil {
 			defer func() {
 				span.EndSpanWithErr(cmd.Err())
@@ -148,7 +148,7 @@ func (w *Wrapper) SetNX(ctx context.Context, key string, value interface{}, expi
 // Close integrates the redis Close command with metrics
 func (w *Wrapper) Close(ctx context.Context) (err error) {
 	if ocredis.AllowTrace(ctx, w.options.Close, w.options.AllowRoot) {
-		span := ocredis.StartSpan(ctx, "Close", w.options)
+		span := ocredis.StartSpan(ctx, "go.redis.close", w.options)
 		if span != nil {
 			defer func() {
 				span.EndSpanWithErr(err)
