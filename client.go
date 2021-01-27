@@ -10,4 +10,9 @@ import (
 type Client interface {
 	Get(ctx context.Context, key string) StringCmd
 	Set(ctx context.Context, key string, value interface{}, expiration time.Duration) StatusCmd
+	Incr(ctx context.Context, key string) IntCmd
+	Ping(ctx context.Context) StatusCmd
+	Del(ctx context.Context, keys ...string) IntCmd
+	SetNX(ctx context.Context, key string, value interface{}, expiration time.Duration) BoolCmd
+	Close(ctx context.Context) error
 }
