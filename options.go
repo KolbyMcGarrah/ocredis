@@ -29,14 +29,18 @@ type TraceOptions struct {
 
 	// Setting the below options will control whether or not spans are created
 	// on their call.
-	Get    bool
-	Set    bool
-	Incr   bool
-	Ping   bool
-	Del    bool
-	SetNX  bool
-	Close  bool
-	Expire bool
+	Get      bool
+	Set      bool
+	Incr     bool
+	Ping     bool
+	Del      bool
+	SetNX    bool
+	Close    bool
+	Expire   bool
+	ExpireAt bool
+	HGet     bool
+	HLen     bool
+	HSet     bool
 }
 
 // WithAllTraceOptions enables all available traceoptions
@@ -48,14 +52,18 @@ func WithAllTraceOptions() TraceOption {
 
 // AllTraceOptions has all tracing options enabled
 var AllTraceOptions = TraceOptions{
-	Get:    true,
-	Set:    true,
-	Incr:   true,
-	Ping:   true,
-	Del:    true,
-	SetNX:  true,
-	Close:  true,
-	Expire: true,
+	Get:      true,
+	Set:      true,
+	Incr:     true,
+	Ping:     true,
+	Del:      true,
+	SetNX:    true,
+	Close:    true,
+	Expire:   true,
+	ExpireAt: true,
+	HLen:     true,
+	HGet:     true,
+	HSet:     true,
 }
 
 // WithAllowRoot if set to true, will allow ocredis to create root spans in
@@ -128,5 +136,33 @@ func WithClose(b bool) TraceOption {
 func WithExpire(b bool) TraceOption {
 	return func(o *TraceOptions) {
 		o.Expire = b
+	}
+}
+
+// WithExpireAt if true will allow tracing on the expire call.
+func WithExpireAt(b bool) TraceOption {
+	return func(o *TraceOptions) {
+		o.ExpireAt = b
+	}
+}
+
+// WithHGet if true will allow tracing on the expire call.
+func WithHGet(b bool) TraceOption {
+	return func(o *TraceOptions) {
+		o.HGet = b
+	}
+}
+
+// WithHLen if true will allow tracing on the expire call.
+func WithHLen(b bool) TraceOption {
+	return func(o *TraceOptions) {
+		o.HLen = b
+	}
+}
+
+// WithHSet if true will allow tracing on the expire call.
+func WithHSet(b bool) TraceOption {
+	return func(o *TraceOptions) {
+		o.HSet = b
 	}
 }
