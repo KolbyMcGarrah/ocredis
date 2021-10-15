@@ -10,7 +10,7 @@ import (
 )
 
 // Wrap returns a wrapped redis client
-func Wrap(c pkgredis.Cmdable, options ...ocredis.TraceOption) *Wrapper {
+func Wrap(c *pkgredis.Client, options ...ocredis.TraceOption) *Wrapper {
 	o := ocredis.TraceOptions{}
 	for _, option := range options {
 		option(&o)
@@ -30,7 +30,7 @@ var _ ocredis.Cmdable = &Wrapper{}
 
 // Wrapper wraps the redis package with an instance name to be used to collect metrics.
 type Wrapper struct {
-	client  pkgredis.Cmdable
+	client  *pkgredis.Client
 	options ocredis.TraceOptions
 }
 
