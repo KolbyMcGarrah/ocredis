@@ -15,4 +15,6 @@ type Client interface {
 	Del(ctx context.Context, keys ...string) IntCmd
 	SetNX(ctx context.Context, key string, value interface{}, expiration time.Duration) BoolCmd
 	Close(ctx context.Context) error
+	LPop(ctx context.Context, key string) StringCmd
+	Eval(ctx context.Context, script string, keys []string, args []string) Cmd
 }

@@ -41,6 +41,8 @@ type TraceOptions struct {
 	HGet     bool
 	HLen     bool
 	HSet     bool
+	LPop     bool
+	Eval     bool
 }
 
 // WithAllTraceOptions enables all available traceoptions
@@ -164,5 +166,19 @@ func WithHLen(b bool) TraceOption {
 func WithHSet(b bool) TraceOption {
 	return func(o *TraceOptions) {
 		o.HSet = b
+	}
+}
+
+// WithLPop if true will allow tracing on the LPop call.
+func WithLPop(b bool) TraceOption {
+	return func(o *TraceOptions) {
+		o.LPop = b
+	}
+}
+
+// WithEval if true will allow tracing on the Eval call.
+func WithEval(b bool) TraceOption {
+	return func(o *TraceOptions) {
+		o.Eval = b
 	}
 }
