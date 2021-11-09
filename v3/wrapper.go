@@ -163,3 +163,39 @@ func (w *Wrapper) Close(ctx context.Context) (err error) {
 	err = w.client.Close()
 	return
 }
+
+// Eval integrates the redis Eval command with metrics
+func (w *Wrapper) Eval(ctx context.Context, script string, keys []string, args []string) (cmd ocredis.Cmd) {
+	if ocredis.AllowTrace(ctx, w.options.Eval, w.options.AllowRoot) {
+		span := ocredis.StartSpan(ctx, "go.redis.eval", w.options)
+		if span != nil {
+			defer func() {
+				span.EndSpanWithErr(cmd.Err())
+			}()
+		}
+	}
+	var recordCallFunc = ocredis.RecordCall(ctx, "go.redis.eval", w.options.InstanceName)
+	defer func() {
+		recordCallFunc(cmd)
+	}()
+	cmd = w.client.Eval(script, keys, args)
+	return
+}
+
+// LPop integrates the redis LPOP command with metrics
+func (w *Wrapper) LPop(ctx context.Context, key string) (cmd ocredis.StringCmd) {
+	if ocredis.AllowTrace(ctx, w.options.LPop, w.options.AllowRoot) {
+		span := ocredis.StartSpan(ctx, "go.redis.lpop", w.options)
+		if span != nil {
+			defer func() {
+				span.EndSpanWithErr(cmd.Err())
+			}()
+		}
+	}
+	var recordCallFunc = ocredis.RecordCall(ctx, "go.redis.lpop", w.options.InstanceName)
+	defer func() {
+		recordCallFunc(cmd)
+	}()
+	cmd = w.client.LPop(key)
+	return
+}
