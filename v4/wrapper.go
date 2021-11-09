@@ -183,7 +183,7 @@ func (w *Wrapper) Expire(ctx context.Context, key string, expiration time.Durati
 }
 
 // Eval integrates the redis Eval command with metrics
-func (w *Wrapper) Eval(ctx context.Context, script string, keys []string, args []string) (cmd ocredis.Cmd) {
+func (w *Wrapper) Eval(ctx context.Context, script string, keys []string, args []string) (cmd ocredis.RedisCmd) {
 	if ocredis.AllowTrace(ctx, w.options.Eval, w.options.AllowRoot) {
 		span := ocredis.StartSpan(ctx, "go.redis.eval", w.options)
 		if span != nil {
