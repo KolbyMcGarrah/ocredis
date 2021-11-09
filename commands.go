@@ -8,6 +8,14 @@ type Cmd interface {
 	fmt.Stringer
 }
 
+// RedisCmd interface matches the Cmd struct returned by redis Clients
+type RedisCmd interface {
+	Err() error
+	fmt.Stringer
+	Result() (interface{}, error)
+	Val() interface{}
+}
+
 // StatusCmd interface matches the StatusCmd struct returned by redis clients
 type StatusCmd interface {
 	Err() error

@@ -16,5 +16,5 @@ type Client interface {
 	SetNX(ctx context.Context, key string, value interface{}, expiration time.Duration) BoolCmd
 	Close(ctx context.Context) error
 	LPop(ctx context.Context, key string) StringCmd
-	Eval(ctx context.Context, script string, keys []string, args []string) Cmd
+	Eval(ctx context.Context, script string, keys []string, args []string) RedisCmd
 }
