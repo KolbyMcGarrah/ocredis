@@ -26,7 +26,7 @@ func Wrap(c *pkgredis.Client, options ...ocredis.TraceOption) *Wrapper {
 	}
 }
 
-var _ ocredis.Cmdable = &Wrapper{}
+var _ ocredis.Client = &Wrapper{}
 
 // Wrapper wraps the redis package with an instance name to be used to collect metrics.
 type Wrapper struct {
@@ -168,4 +168,145 @@ func (w *Wrapper) Set(ctx context.Context, key string, value interface{}, expira
 	}()
 	cmd = w.client.Set(key, value, expiration)
 	return
+}
+
+func (w *Wrapper) LPush(ctx context.Context, key string, values ...interface{}) (cmd ocredis.IntCmd) {
+	if ocredis.AllowTrace(ctx, w.options.LPush, w.options.AllowRoot) {
+		span := ocredis.StartSpan(ctx, "LPush", w.options)
+		if span != nil {
+			defer func() {
+				span.EndSpanWithErr(cmd.Err())
+			}()
+		}
+	}
+	var recordCallFunc = ocredis.RecordCall(ctx, "go.redis.lpush", w.options.InstanceName)
+	defer func() {
+		recordCallFunc(cmd)
+	}()
+	cmd = w.client.LPush(key, values...)
+	return
+}
+func (w *Wrapper) RPush(ctx context.Context, key string, values ...interface{}) (cmd ocredis.IntCmd) {
+	if ocredis.AllowTrace(ctx, w.options.RPush, w.options.AllowRoot) {
+		span := ocredis.StartSpan(ctx, "RPush", w.options)
+		if span != nil {
+			defer func() {
+				span.EndSpanWithErr(cmd.Err())
+			}()
+		}
+	}
+	var recordCallFunc = ocredis.RecordCall(ctx, "go.redis.rpush", w.options.InstanceName)
+	defer func() {
+		recordCallFunc(cmd)
+	}()
+	cmd = w.client.RPush(key, values...)
+	return
+}
+func (w *Wrapper) RPop(ctx context.Context, key string) (cmd ocredis.StringCmd) {
+	if ocredis.AllowTrace(ctx, w.options.RPop, w.options.AllowRoot) {
+		span := ocredis.StartSpan(ctx, "RPop", w.options)
+		if span != nil {
+			defer func() {
+				span.EndSpanWithErr(cmd.Err())
+			}()
+		}
+	}
+	var recordCallFunc = ocredis.RecordCall(ctx, "go.redis.rpop", w.options.InstanceName)
+	defer func() {
+		recordCallFunc(cmd)
+	}()
+	cmd = w.client.RPop(key)
+	return
+}
+
+// Close integrates the redis Close command with metrics
+func (w *Wrapper) Close(ctx context.Context) (err error) {
+	if ocredis.AllowTrace(ctx, w.options.Close, w.options.AllowRoot) {
+		span := ocredis.StartSpan(ctx, "Close", w.options)
+		if span != nil {
+			defer func() {
+				span.EndSpanWithErr(err)
+			}()
+		}
+	}
+	var recordCallFunc = ocredis.RecordCall(ctx, "go.redis.close", w.options.InstanceName)
+	defer func() {
+		// Pass in a blank cmd because there is no command type returned from close
+		recordCallFunc(&pkgredis.Cmd{})
+	}()
+	err = w.client.Close()
+	return
+}
+
+// Eval integrates the redis Eval command with metrics
+func (w *Wrapper) Eval(ctx context.Context, script string, keys []string, args []string) (cmd ocredis.RedisCmd) {
+	if ocredis.AllowTrace(ctx, w.options.Eval, w.options.AllowRoot) {
+		span := ocredis.StartSpan(ctx, "go.redis.eval", w.options)
+		if span != nil {
+			defer func() {
+				span.EndSpanWithErr(cmd.Err())
+			}()
+		}
+	}
+	var recordCallFunc = ocredis.RecordCall(ctx, "go.redis.eval", w.options.InstanceName)
+	defer func() {
+		recordCallFunc(cmd)
+	}()
+	cmd = w.client.Eval(script, keys, args)
+	return
+}
+
+// Incr integrates the redis Incr command with metrics
+func (w *Wrapper) Incr(ctx context.Context, key string) (cmd ocredis.IntCmd) {
+	if ocredis.AllowTrace(ctx, w.options.Incr, w.options.AllowRoot) {
+		span := ocredis.StartSpan(ctx, "Incr", w.options)
+		if span != nil {
+			defer func() {
+				span.EndSpanWithErr(cmd.Err())
+			}()
+		}
+	}
+	var recordCallFunc = ocredis.RecordCall(ctx, "go.redis.incr", w.options.InstanceName)
+	defer func() {
+		recordCallFunc(cmd)
+	}()
+	cmd = w.client.Incr(key)
+	return
+
+}
+
+// LPop integrates the redis LPOP command with metrics
+func (w *Wrapper) LPop(ctx context.Context, key string) (cmd ocredis.StringCmd) {
+	if ocredis.AllowTrace(ctx, w.options.LPop, w.options.AllowRoot) {
+		span := ocredis.StartSpan(ctx, "go.redis.lpop", w.options)
+		if span != nil {
+			defer func() {
+				span.EndSpanWithErr(cmd.Err())
+			}()
+		}
+	}
+	var recordCallFunc = ocredis.RecordCall(ctx, "go.redis.lpop", w.options.InstanceName)
+	defer func() {
+		recordCallFunc(cmd)
+	}()
+	cmd = w.client.LPop(key)
+	return
+}
+
+// Ping integrates the redis Ping command with metrics
+func (w *Wrapper) Ping(ctx context.Context) (cmd ocredis.StatusCmd) {
+	if ocredis.AllowTrace(ctx, w.options.Ping, w.options.AllowRoot) {
+		span := ocredis.StartSpan(ctx, "Ping", w.options)
+		if span != nil {
+			defer func() {
+				span.EndSpanWithErr(cmd.Err())
+			}()
+		}
+	}
+	var recordCallFunc = ocredis.RecordCall(ctx, "go.redis.ping", w.options.InstanceName)
+	defer func() {
+		recordCallFunc(cmd)
+	}()
+	cmd = w.client.Ping()
+	return cmd
 }

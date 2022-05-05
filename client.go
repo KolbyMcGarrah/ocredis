@@ -17,4 +17,11 @@ type Client interface {
 	Close(ctx context.Context) error
 	LPop(ctx context.Context, key string) StringCmd
 	Eval(ctx context.Context, script string, keys []string, args []string) RedisCmd
+	LPush(ctx context.Context, key string, values ...interface{}) IntCmd
+	RPush(ctx context.Context, key string, values ...interface{}) IntCmd
+	RPop(ctx context.Context, key string) StringCmd
+	HSet(ctx context.Context, key, field string, value interface{}) BoolCmd
+	HGet(ctx context.Context, key, field string) StringCmd
+	HLen(ctx context.Context, key string) IntCmd
+	ExpireAt(ctx context.Context, key string, tm time.Time) BoolCmd
 }

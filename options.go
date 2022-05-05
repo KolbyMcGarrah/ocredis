@@ -43,6 +43,9 @@ type TraceOptions struct {
 	HSet     bool
 	LPop     bool
 	Eval     bool
+	LPush    bool
+	RPush    bool
+	RPop     bool
 }
 
 // WithAllTraceOptions enables all available traceoptions
@@ -66,6 +69,10 @@ var AllTraceOptions = TraceOptions{
 	HLen:     true,
 	HGet:     true,
 	HSet:     true,
+	Eval:     true,
+	LPush:    true,
+	RPush:    true,
+	RPop:     true,
 }
 
 // WithAllowRoot if set to true, will allow ocredis to create root spans in
@@ -180,5 +187,26 @@ func WithLPop(b bool) TraceOption {
 func WithEval(b bool) TraceOption {
 	return func(o *TraceOptions) {
 		o.Eval = b
+	}
+}
+
+// WithLPush if true will allow tracing on the LPush call.
+func WithLPush(b bool) TraceOption {
+	return func(o *TraceOptions) {
+		o.LPush = b
+	}
+}
+
+// WithRPush if true will allow tracing on the RPush call.
+func WithRPush(b bool) TraceOption {
+	return func(o *TraceOptions) {
+		o.RPush = b
+	}
+}
+
+// WithRPop if true will allow tracing on the RPop call.
+func WithRPop(b bool) TraceOption {
+	return func(o *TraceOptions) {
+		o.RPop = b
 	}
 }
