@@ -217,3 +217,128 @@ func (w *Wrapper) LPop(ctx context.Context, key string) (cmd ocredis.StringCmd) 
 	cmd = w.client.LPop(key)
 	return
 }
+
+func (w *Wrapper) LPush(ctx context.Context, key string, values ...interface{}) (cmd ocredis.IntCmd) {
+	if ocredis.AllowTrace(ctx, w.options.LPush, w.options.AllowRoot) {
+		span := ocredis.StartSpan(ctx, "LPush", w.options)
+		if span != nil {
+			defer func() {
+				span.EndSpanWithErr(cmd.Err())
+			}()
+		}
+	}
+	var recordCallFunc = ocredis.RecordCall(ctx, "go.redis.lpush", w.options.InstanceName)
+	defer func() {
+		recordCallFunc(cmd)
+	}()
+	cmd = w.client.LPush(key, values...)
+	return
+}
+func (w *Wrapper) RPush(ctx context.Context, key string, values ...interface{}) (cmd ocredis.IntCmd) {
+	if ocredis.AllowTrace(ctx, w.options.RPush, w.options.AllowRoot) {
+		span := ocredis.StartSpan(ctx, "RPush", w.options)
+		if span != nil {
+			defer func() {
+				span.EndSpanWithErr(cmd.Err())
+			}()
+		}
+	}
+	var recordCallFunc = ocredis.RecordCall(ctx, "go.redis.rpush", w.options.InstanceName)
+	defer func() {
+		recordCallFunc(cmd)
+	}()
+	cmd = w.client.RPush(key, values...)
+	return
+}
+func (w *Wrapper) RPop(ctx context.Context, key string) (cmd ocredis.StringCmd) {
+	if ocredis.AllowTrace(ctx, w.options.RPop, w.options.AllowRoot) {
+		span := ocredis.StartSpan(ctx, "RPop", w.options)
+		if span != nil {
+			defer func() {
+				span.EndSpanWithErr(cmd.Err())
+			}()
+		}
+	}
+	var recordCallFunc = ocredis.RecordCall(ctx, "go.redis.rpop", w.options.InstanceName)
+	defer func() {
+		recordCallFunc(cmd)
+	}()
+	cmd = w.client.RPop(key)
+	return
+}
+
+func (w *Wrapper) ExpireAt(ctx context.Context, key string, tm time.Time) (cmd ocredis.BoolCmd) {
+	if ocredis.AllowTrace(ctx, w.options.ExpireAt, w.options.AllowRoot) {
+		span := ocredis.StartSpan(ctx, "ExpireAt", w.options)
+		if span != nil {
+			defer func() {
+				span.EndSpanWithErr(cmd.Err())
+			}()
+		}
+	}
+	var recordCallFunc = ocredis.RecordCall(ctx, "go.redis.expireat", w.options.InstanceName)
+	defer func() {
+		recordCallFunc(cmd)
+	}()
+	cmd = w.client.ExpireAt(key, tm)
+	return cmd
+}
+
+func (w *Wrapper) HGet(ctx context.Context, key, field string) (cmd ocredis.StringCmd) {
+	if ocredis.AllowTrace(ctx, w.options.HGet, w.options.AllowRoot) {
+		span := ocredis.StartSpan(ctx, "HGet", w.options)
+		if span != nil {
+			defer func() {
+				span.EndSpanWithErr(cmd.Err())
+			}()
+		}
+	}
+	var recordCallFunc = ocredis.RecordCall(ctx, "go.redis.hget", w.options.InstanceName)
+	defer func() {
+		recordCallFunc(cmd)
+	}()
+	cmd = w.client.HGet(key, field)
+	return
+}
+
+func (w *Wrapper) HLen(ctx context.Context, key string) (cmd ocredis.IntCmd) {
+	if ocredis.AllowTrace(ctx, w.options.HLen, w.options.AllowRoot) {
+		span := ocredis.StartSpan(ctx, "HLen", w.options)
+		if span != nil {
+			defer func() {
+				span.EndSpanWithErr(cmd.Err())
+			}()
+		}
+	}
+	var recordCallFunc = ocredis.RecordCall(ctx, "go.redis.hlen", w.options.InstanceName)
+	defer func() {
+		recordCallFunc(cmd)
+	}()
+	cmd = w.client.HLen(key)
+	return
+}
+
+func (w *Wrapper) HSet(ctx context.Context, key, field string, value interface{}) (cmd ocredis.BoolCmd) {
+	var (
+		strVal string
+		ok     bool
+	)
+
+	if ocredis.AllowTrace(ctx, w.options.HSet, w.options.AllowRoot) {
+		span := ocredis.StartSpan(ctx, "Hset", w.options)
+		if span != nil {
+			defer func() {
+				span.EndSpanWithErr(cmd.Err())
+			}()
+		}
+	}
+	var recordCallFunc = ocredis.RecordCall(ctx, "go.redis.hset", w.options.InstanceName)
+	defer func() {
+		recordCallFunc(cmd)
+	}()
+	if strVal, ok = value.(string); !ok {
+		return
+	}
+	cmd = w.client.HSet(key, field, strVal)
+	return
+}
