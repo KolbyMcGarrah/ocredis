@@ -2,6 +2,7 @@ package v4
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/KolbyMcGarrah/ocredis"
@@ -337,7 +338,7 @@ func (w *Wrapper) HSet(ctx context.Context, key, field string, value interface{}
 		recordCallFunc(cmd)
 	}()
 	if strVal, ok = value.(string); !ok {
-		return
+		strVal = fmt.Sprintf("%v", value)
 	}
 	cmd = w.client.HSet(key, field, strVal)
 	return
